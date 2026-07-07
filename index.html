@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bia hortifruti</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: #000000;
+            line-height: 1.6;
+            overflow-x: hidden; /* Evita barra de rolagem durante a animação */
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Configuração inicial de cada letra/espaço */
+        .hero h1 span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateX(100vw);
+            transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 1s ease; /* Transição suave para o retorno */
+        }
+
+        /* Classe de animação aplicada no início */
+        .hero h1.animando span {
+            animation: ondaESaida 6s ease-in-out forwards;
+        }
+
+        /* Classe aplicada via JS para fazer o título voltar e fixar */
+        .hero h1.fixado span {
+            opacity: 1;
+            transform: translateX(0) translateY(0);
+        }
+
+        /* Espaço em branco entre as palavras */
+        .hero h1 .espaco {
+            width: 1rem; 
+        }
+
+        /* Controle do atraso (delay) de cada letra para o efeito de onda */
+        .hero h1 span:nth-child(1) { animation-delay: 0.1s; } 
+        .hero h1 span:nth-child(2) { animation-delay: 0.2s; } 
+        .hero h1 span:nth-child(3) { animation-delay: 0.3s; } 
+        .hero h1 span:nth-child(4) { animation-delay: 0.4s; } 
+        .hero h1 span:nth-child(5) { animation-delay: 0.5s; } 
+        .hero h1 span:nth-child(6) { animation-delay: 0.6s; } 
+        .hero h1 span:nth-child(7) { animation-delay: 0.7s; } 
+        .hero h1 span:nth-child(8) { animation-delay: 0.8s; } 
+        .hero h1 span:nth-child(9) { animation-delay: 0.9s; } 
+        .hero h1 span:nth-child(10) { animation-delay: 1.0s; } 
+        .hero h1 span:nth-child(11) { animation-delay: 1.1s; } 
+        .hero h1 span:nth-child(12) { animation-delay: 1.2s; } 
+        .hero h1 span:nth-child(13) { animation-delay: 1.3s; } 
+        .hero h1 span:nth-child(14) { animation-delay: 1.4s; } 
+
+        /* Linha do tempo da animação */
+        @keyframes ondaESaida {
+            0% {
+                opacity: 0;
+                transform: translateX(100vw) translateY(0);
+            }
+            15% {
+                opacity: 1;
+                transform: translateX(0) translateY(-20px); 
+            }
+            25% {
+                transform: translateX(0) translateY(10px); 
+            }
+            35% {
+                transform: translateX(0) translateY(0); 
+            }
+            85% {
+                opacity: 1;
+                transform: translateX(0) translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateX(100vw) translateY(0);
+            }
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+
+        .cta-btn {
+            background-color: #fff;
+            color: #ff7e5f;
+            padding: 15px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* --- SEÇÃO DO SLIDER --- */
+        .produtos-slider {
+            padding: 60px 20px;
+            background-color: #ffffff;
+            text-align: center;
+        }
+
+        .produtos-slider h2 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            color: #ff7e5f;
+        }
+
+        .slider-container {
+            position: relative;
+            max-width: 800px;
+            height: 450px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            background-color: #1a1a1a; /* Fundo escuro para destacar as imagens inteiras */
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+            position: relative;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            /* MODIFICAÇÃO CRÍTICA: contain faz a imagem aparecer inteira sem cortes */
+            object-fit: contain; 
+        }
+        /* ------------------------------------ */
+
+        /* Estilização do Rodapé */
+        .footer-social {
+            background-color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+
+        .social-icons-container {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 10px;
+        }
+
+        .social-icon {
+            font-size: 2rem;
+            color: #555;
+            text-decoration: none;
+            display: inline-block;
+            transition: color 0.3s ease;
+            animation: ondaIcone 2s ease-in-out infinite;
+        }
+
+        .social-icon:nth-child(1) { animation-delay: 0s; }
+        .social-icon:nth-child(2) { animation-delay: 0.3s; }
+        .social-icon:nth-child(3) { animation-delay: 0.6s; }
+
+        .social-icon.facebook:hover { color: #1877F2; }
+        .social-icon.instagram:hover { color: #E1306C; }
+        .social-icon.tiktok:hover { color: #010101; }
+
+        @keyframes ondaIcone {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.8rem; }
+            .hero p { font-size: 1.2rem; }
+            .slider-container { height: 300px; } 
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <h1 id="titulo-principal" class="animando">
+            <span>B</span><span>i</span><span>a</span><span class="espaco"></span><span>h</span><span>o</span><span>r</span><span>t</span><span>i</span><span>f</span><span>r</span><span>u</span><span>t</span><span>i</span>
+        </h1>
+        <p>O sabor natural e a energia que o seu dia precisa. Descubra nossas opções frescas e saudáveis!</p>
+        <a href="#produtos" class="cta-btn">Conhecer Produtos</a>
+    </section>
+
+    <section id="produtos" class="produtos-slider">
+        <h2>Nossas Opções Frescas</h2>
+        <p style="margin-bottom: 25px; color: #666;">Produtos selecionados direto do produtor para a sua mesa.</p>
+        
+        <div class="slider-container" id="meuSlider">
+            <div class="slide active">
+                <img src="./img/img1.jpg" alt="Frutas frescas selecionadas">
+            </div>
+            <div class="slide">
+                <img src="./img/img2.jpg" alt="Verduras e hortaliças colhidas no dia">
+            </div>
+            <div class="slide">
+                <img src="./img/img3.jpg" alt="Legumes saudáveis variados">
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer-social">
+        <p style="font-size: 0.9rem; color: #777;">Siga-nos nas redes sociais:</p>
+        <div class="social-icons-container">
+            <a href="#" target="_blank" class="social-icon facebook" title="Facebook"><i class="fab fa-facebook"></i></a>
+            <a href="#" target="_blank" class="social-icon instagram" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" target="_blank" class="social-icon tiktok" title="TikTok"><i class="fab fa-tiktok"></i></a>
+        </div>
+    </footer>
+
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
+
+    <script>
+        /* --- LOGICA DO TITULO --- */
+        const titulo = document.getElementById('titulo-principal');
+        titulo.addEventListener('animationend', (e) => {
+            if (e.target === titulo.lastElementChild) {
+                setTimeout(() => {
+                    titulo.classList.remove('animando');
+                    titulo.classList.add('fixado');
+                }, 300);
+            }
+        });
+
+        /* --- LÓGICA DO SLIDER COM PAUSA NO HOVER --- */
+        const slides = document.querySelectorAll('.slide');
+        const container = document.getElementById('meuSlider');
+        let indexAtual = 0;
+        let IDIntervalo;
+
+        function mudarSlide() {
+            slides[indexAtual].classList.remove('active');
+            indexAtual = (indexAtual + 1) % slides.length;
+            slides[indexAtual].classList.add('active');
+        }
+
+        function iniciarTransicao() {
+            IDIntervalo = setInterval(mudarSlide, 2000);
+        }
+
+        function pararTransicao() {
+            clearInterval(IDIntervalo);
+        }
+
+        iniciarTransicao();
+        container.addEventListener('mouseenter', pararTransicao);
+        container.addEventListener('mouseleave', iniciarTransicao);
+    </script>
+</body>
+</html>
