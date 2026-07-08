@@ -157,7 +157,7 @@
             overflow: hidden;
             border-radius: 15px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            background-color: #1a1a1a; /* Fundo escuro para destacar as imagens inteiras */
+            background-color: #1a1a1a; 
         }
 
         .slide {
@@ -181,11 +181,10 @@
         .slide img {
             width: 100%;
             height: 100%;
-            /* MODIFICAÇÃO CRÍTICA: contain faz a imagem aparecer inteira sem cortes */
             object-fit: contain; 
         }
 
-        /* --- NOVA SEÇÃO: CARDS COM EFEITO DE ZOOM --- */
+        /* --- CARDS COM EFEITO DE ZOOM --- */
         .secao-cards {
             padding: 40px 20px 80px 20px;
             background-color: #ffffff;
@@ -209,13 +208,12 @@
         .card-produto {
             background-color: #fdfdfd;
             border-radius: 12px;
-            overflow: hidden; /* Importante para o zoom não vazar do card */
+            overflow: hidden; 
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: 1px solid #f0f0f0;
         }
 
-        /* Efeito de elevação leve no card inteiro ao passar o mouse */
         .card-produto:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
@@ -224,20 +222,19 @@
         .card-img-container {
             width: 100%;
             height: 200px;
-            overflow: hidden; /* Corta as bordas da imagem durante o crescimento (zoom) */
+            overflow: hidden; 
             background-color: #f9f9f9;
         }
 
         .card-img-container img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Garante o preenchimento proporcional do espaço do card */
-            transition: transform 0.4s ease; /* Transição suave para o efeito de zoom */
+            object-fit: cover; 
+            transition: transform 0.4s ease; 
         }
 
-        /* Aplica o efeito de Zoom focado na imagem interna quando o card sofre hover */
         .card-produto:hover .card-img-container img {
-            transform: scale(1.12); /* Aumenta a imagem em 12% criando o efeito de zoom */
+            transform: scale(1.12); 
         }
 
         .card-info {
@@ -262,7 +259,111 @@
             color: #ff7e5f;
             font-size: 1.1rem;
         }
-        /* ------------------------------------ */
+
+        /* --- NOVO: ESTILIZAÇÃO DO MODAL DE PROMOÇÃO --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+
+        .modal-overlay.mostrar {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            padding: 35px 25px;
+            border-radius: 20px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            transform: scale(0.8);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 4px solid #ff7e5f;
+        }
+
+        .modal-overlay.mostrar .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: #ff7e5f;
+        }
+
+        .modal-content i.fa-tag {
+            font-size: 3.5rem;
+            color: #ff7e5f;
+            margin-bottom: 15px;
+        }
+
+        .modal-content h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .modal-cupom {
+            background-color: #fff0ec;
+            color: #ff7e5f;
+            font-size: 2.2rem;
+            font-weight: 900;
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 15px 0;
+            border: 2px dashed #ff7e5f;
+            letter-spacing: 1px;
+        }
+
+        .modal-content p {
+            color: #555;
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+        }
+
+        .modal-btn {
+            background: linear-gradient(135deg, #ff7e5f, #feb47b);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 126, 95, 0.3);
+            transition: transform 0.2s;
+            width: 100%;
+        }
+
+        .modal-btn:hover {
+            transform: scale(1.03);
+        }
 
         /* Estilização do Rodapé */
         .footer-social {
@@ -310,6 +411,18 @@
     </style>
 </head>
 <body>
+
+    <div class="modal-overlay" id="promoModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModalBtn">&times;</button>
+            <i class="fas fa-tag"></i>
+            <h2>Oferta Imperdível!</h2>
+            <p>Aproveite um desconto super especial em nosso hortifrúti.</p>
+            <div class="modal-cupom">80% OFF</div>
+            <p>Válido para a sua primeira compra selecionada no <strong>Hortifruti Bia</strong>.</p>
+            <button class="modal-btn" id="actionModalBtn">Garantir Meu Desconto</button>
+        </div>
+    </div>
 
     <section class="hero">
         <h1 id="titulo-principal" class="animando">
@@ -442,6 +555,33 @@
         iniciarTransicao();
         container.addEventListener('mouseenter', pararTransicao);
         container.addEventListener('mouseleave', iniciarTransicao);
+
+        /* --- NOVO: LÓGICA DO MODAL DE PROMOÇÃO --- */
+        const modal = document.getElementById('promoModal');
+        const btnFechar = document.getElementById('closeModalBtn');
+        const btnAcao = document.getElementById('actionModalBtn');
+
+        // Exibe o modal 2 segundos após o carregamento da página
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                modal.classList.add('mostrar');
+            }, 2000);
+        });
+
+        // Função para fechar o modal
+        function fecharModal() {
+            modal.classList.remove('mostrar');
+        }
+
+        btnFechar.addEventListener('click', fecharModal);
+        btnAcao.addEventListener('click', fecharModal);
+
+        // Fecha o modal caso o usuário clique fora da caixa de conteúdo
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                fecharModal();
+            }
+        });
     </script>
 </body>
 </html>
